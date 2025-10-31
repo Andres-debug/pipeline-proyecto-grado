@@ -1,22 +1,26 @@
-﻿# 🎓 Proyecto de Grado: Arquitectura de BI y Big Data para Turismo Académico en Medellín
+﻿# Proyecto de Grado: Arquitectura de BI y Big Data para Turismo Académico en Medellín
 
-## 📋 Descripción del Proyecto
+## Descripción del Proyecto
 
-Sistema completo de Inteligencia de Negocios y Big Data para analizar el impacto económico del turismo académico en Medellín, consolidando datos de movilidad estudiantil internacional de tres universidades: **IUSH**, **Universidad de Antioquia** y **UNAC**.
+Este proyecto implementa un sistema integral de Inteligencia de Negocios y Big Data orientado al análisis del impacto económico del turismo académico en la ciudad de Medellín. El sistema consolida datos de movilidad estudiantil internacional provenientes de tres instituciones universitarias: IUSH, Universidad de Antioquia y UNAC.
 
----
-
-## 🎯 Objetivos
-
-1. ✅ Consolidar datos fragmentados de oficinas de internacionalización
-2. ✅ Crear pipeline ETL automatizado en Python
-3. ✅ Implementar modelos descriptivos y predictivos (ARIMA, regresión, ML)
-4. ✅ Desarrollar dashboards en Power BI
-5. ✅ Cuantificar el impacto económico del turismo académico
+La arquitectura desarrollada permite transformar datos fragmentados y heterogéneos en información estratégica para la toma de decisiones en el sector educativo y turístico de la región.
 
 ---
 
-## 🗂️ Estructura del Proyecto
+## Objetivos
+
+El proyecto busca alcanzar los siguientes objetivos específicos:
+
+1. Consolidar datos dispersos de las oficinas de internacionalización de las universidades participantes
+2. Desarrollar un pipeline ETL automatizado utilizando Python y sus librerías especializadas
+3. Implementar modelos estadísticos descriptivos y predictivos (ARIMA, regresión lineal, machine learning)
+4. Crear visualizaciones interactivas mediante dashboards en Power BI
+5. Cuantificar el impacto económico directo e indirecto del turismo académico en Medellín
+
+---
+
+## Estructura del Proyecto
 
 ```
 proyecto_turismo_academico/
@@ -59,124 +63,146 @@ proyecto_turismo_academico/
 ├── sql/
 │   └── crear_tablas_postgresql.sql        # Script de creación BD
 │
+├── .gitignore                             # Archivos ignorados por Git
 ├── requirements.txt                        # Dependencias Python
 └── README.md                              # Este archivo
 ```
 
 ---
 
-## 🚀 Instalación y Configuración
+## Instalación y Configuración
 
 ### Prerrequisitos
 
-- **Python 3.10+** instalado
-- **Jupyter Notebook** o **JupyterLab**
-- **PostgreSQL** (opcional, para producción)
-- **Power BI Desktop** (para visualizaciones finales)
+El proyecto requiere las siguientes herramientas instaladas en el sistema:
 
-### Paso 1: Clonar o Descargar el Proyecto
+- Python 3.10 o superior
+- Jupyter Notebook o JupyterLab
+- PostgreSQL (opcional, para entornos de producción)
+- Power BI Desktop (para visualizaciones finales)
+
+### Paso 1: Preparación del Entorno
+
+Navegue al directorio del proyecto:
 
 ```bash
 cd C:\Users\Administrador\Desktop\Especializacion\pgrado-api
 ```
 
-### Paso 2: Crear Entorno Virtual (Recomendado)
+### Paso 2: Creación de Entorno Virtual
+
+Se recomienda utilizar un entorno virtual para aislar las dependencias del proyecto:
 
 ```bash
 # Crear entorno virtual
-python -m venv venv
+python -m venv .venv
 
 # Activar entorno virtual
-# En Windows:
-venv\Scripts\activate
-# En Linux/Mac:
-source venv/bin/activate
+# En Windows PowerShell:
+.venv\Scripts\Activate.ps1
+# En Windows CMD:
+.venv\Scripts\activate.bat
 ```
 
-### Paso 3: Instalar Dependencias
+### Paso 3: Instalación de Dependencias
+
+Instale todas las librerías necesarias mediante el archivo de requisitos:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**Librerías principales incluidas:**
-- `pandas` - Manipulación de datos
-- `numpy` - Cálculos numéricos
-- `matplotlib`, `seaborn` - Visualizaciones
-- `statsmodels` - Modelos ARIMA
-- `scikit-learn` - Machine Learning
-- `openpyxl` - Lectura/escritura Excel
-- `psycopg2-binary` - Conexión PostgreSQL
+El archivo `requirements.txt` incluye las siguientes librerías principales:
+
+- pandas: manipulación y análisis de datos
+- numpy: operaciones numéricas y matrices
+- matplotlib y seaborn: visualización de datos
+- statsmodels: modelos estadísticos y series temporales
+- scikit-learn: algoritmos de machine learning
+- openpyxl: lectura y escritura de archivos Excel
+- psycopg2-binary: conexión a bases de datos PostgreSQL
 
 ---
 
-## 📊 Uso del Sistema
+## Uso del Sistema
 
 ### Ejecución Secuencial de Notebooks
 
-Los notebooks deben ejecutarse **en orden** ya que cada uno depende del anterior:
+Los notebooks deben ejecutarse en orden estricto, ya que cada uno genera archivos que son utilizados por los siguientes. A continuación se describe el propósito de cada notebook:
 
-#### **Notebook 1: Carga y Exploración**
+#### Notebook 1: Carga y Exploración de Datos
+
 ```bash
 jupyter notebook notebooks/01_carga_exploracion_datos.ipynb
 ```
 
-**Qué hace:**
-- ✅ Carga datos CSV de IUSH
-- ✅ Inspecciona dimensiones y estructura
-- ✅ Identifica problemas de calidad
-- ✅ Genera visualizaciones preliminares
+Este notebook realiza las siguientes operaciones:
 
-**Salida:** Gráficas exploratorias en `outputs/graficas/`
+- Carga inicial de archivos CSV provenientes de IUSH
+- Inspección de dimensiones, tipos de datos y estructura general
+- Identificación preliminar de problemas de calidad (valores nulos, duplicados, inconsistencias)
+- Generación de visualizaciones exploratorias básicas
+
+Salida: Gráficas preliminares guardadas en `outputs/graficas/`
 
 ---
 
-#### **Notebook 2: Limpieza y ETL**
+#### Notebook 2: Limpieza y ETL
+
 ```bash
 jupyter notebook notebooks/02_limpieza_estandarizacion_etl.ipynb
 ```
 
-**Qué hace:**
-- ✅ Elimina filas vacías y duplicados
-- ✅ Estandariza nomenclatura de países
-- ✅ Crea variables derivadas (periodo, categorías, etc.)
-- ✅ Valida calidad post-limpieza
+Funciones principales:
 
-**Salida:** `data/processed/datos_consolidados_limpios.csv`
+- Eliminación de filas completamente vacías y duplicados
+- Estandarización de nomenclatura de países según códigos ISO
+- Creación de variables derivadas (periodo académico, categorías de duración, etc.)
+- Validación de calidad posterior a la limpieza
+- Exportación de datos limpios
+
+Salida: Archivo `data/processed/datos_consolidados_limpios.csv`
 
 ---
 
-#### **Notebook 3: Análisis Descriptivo**
+#### Notebook 3: Análisis Descriptivo
+
 ```bash
 jupyter notebook notebooks/03_analisis_descriptivo.ipynb
 ```
 
-**Qué hace:**
-- ✅ Estadísticas descriptivas completas
-- ✅ Análisis temporal de tendencias
-- ✅ Distribución geográfica de estudiantes
-- ✅ Análisis financiero
-- ✅ Identificación de outliers
-- ✅ Matriz de correlaciones
+Análisis realizados:
 
-**Salida:** 
-- Gráficas de análisis en `outputs/graficas/`
-- `data/results/estadisticas_descriptivas.csv`
+- Estadísticas descriptivas completas (media, mediana, desviación estándar, percentiles)
+- Análisis de series temporales: tendencias, estacionalidad, tasas de crecimiento
+- Distribución geográfica: principales países de origen y evolución temporal
+- Análisis por tipo de movilidad y duración de estancia
+- Estimación de impacto económico basado en modelos de gasto promedio
+- Detección de valores atípicos mediante método IQR
+- Análisis de correlaciones entre variables
+
+Salida: 
+- Múltiples visualizaciones en `outputs/graficas/`
+- Archivo `data/results/estadisticas_descriptivas.csv`
 
 ---
 
-#### **Notebook 4: Modelos Predictivos**
+#### Notebook 4: Modelos Predictivos
+
 ```bash
 jupyter notebook notebooks/04_modelos_predictivos.ipynb
 ```
 
-**Qué hace:**
-- ✅ Modelo ARIMA para proyecciones temporales
-- ✅ Modelo de Regresión Lineal
-- ✅ Modelo Random Forest (comparación)
-- ✅ Estimación de impacto económico futuro
+Modelos implementados:
 
-**Salida:**
+- **ARIMA (AutoRegressive Integrated Moving Average)**: proyecciones de flujos futuros de movilidad estudiantil para los próximos 6 semestres académicos
+- **Regresión Lineal Múltiple**: identificación de variables explicativas de la duración de movilidad
+- **Random Forest**: modelo de comparación para validar precisión predictiva
+- **Estimación de impacto económico futuro**: proyecciones de gasto con multiplicador económico
+
+Métricas de evaluación: R², RMSE, MAE, MAPE
+
+Salida:
 - `data/results/proyecciones_arima.csv`
 - `data/results/proyecciones_impacto_economico.csv`
 - `data/results/comparacion_modelos.csv`
@@ -184,186 +210,210 @@ jupyter notebook notebooks/04_modelos_predictivos.ipynb
 
 ---
 
-#### **Notebook 5: Integración Power BI**
+#### Notebook 5: Integración con Power BI
+
 ```bash
 jupyter notebook notebooks/05_integracion_powerbi_exportacion.ipynb
 ```
 
-**Qué hace:**
-- ✅ Crea modelo dimensional (esquema estrella)
-- ✅ Genera tablas dim_* y fact_movilidad
-- ✅ Calcula KPIs principales
-- ✅ Exporta datos optimizados para Power BI
-- ✅ Genera script SQL para PostgreSQL
+Procesos ejecutados:
 
-**Salida:**
+- Diseño e implementación de modelo dimensional (esquema estrella)
+- Creación de tablas de dimensiones: tiempo, geografía, universidad, tipo de movilidad
+- Creación de tabla de hechos con métricas de movilidad
+- Cálculo de 11 KPIs principales para dashboards
+- Generación de script SQL para PostgreSQL
+- Exportación de datos optimizados para Power BI
+
+Salida:
 - Modelo dimensional completo en `data/results/`
-- `sql/crear_tablas_postgresql.sql`
-- `outputs/reportes/guia_powerbi.txt`
-- `outputs/reportes/reporte_ejecutivo_final.md`
+- Script SQL en `sql/crear_tablas_postgresql.sql`
+- Guía de integración en `outputs/reportes/guia_powerbi.txt`
+- Reporte ejecutivo final en `outputs/reportes/reporte_ejecutivo_final.md`
 
 ---
 
-## 📈 Integración con Power BI
+## Integración con Power BI
 
-### Opción 1: Importar desde CSV (Rápido)
+### Opción 1: Importación desde Archivos CSV
 
-1. Abrir **Power BI Desktop**
-2. **Inicio** > **Obtener datos** > **Texto/CSV**
-3. Importar archivos desde `data/results/`:
-   - `dim_tiempo.csv`
-   - `dim_geografia.csv`
-   - `dim_universidad.csv`
-   - `dim_tipo_movilidad.csv`
-   - `fact_movilidad.csv`
-4. En **Vista de Modelo**, crear relaciones:
-   - `fact_movilidad[ID_TIEMPO]` → `dim_tiempo[ID_TIEMPO]`
-   - `fact_movilidad[ID_PAIS]` → `dim_geografia[ID_PAIS]`
-   - `fact_movilidad[ID_UNIVERSIDAD]` → `dim_universidad[ID_UNIVERSIDAD]`
-   - `fact_movilidad[ID_TIPO_MOVILIDAD]` → `dim_tipo_movilidad[ID_TIPO_MOVILIDAD]`
+Esta opción es la más rápida y recomendada para desarrollo:
 
-### Opción 2: Usar PostgreSQL (Producción)
+1. Abra Power BI Desktop
+2. Seleccione **Inicio > Obtener datos > Texto/CSV**
+3. Importe los siguientes archivos desde `data/results/`:
+   - dim_tiempo.csv
+   - dim_geografia.csv
+   - dim_universidad.csv
+   - dim_tipo_movilidad.csv
+   - fact_movilidad.csv
+4. En la **Vista de Modelo**, establezca las siguientes relaciones:
+   - fact_movilidad[ID_TIEMPO] → dim_tiempo[ID_TIEMPO]
+   - fact_movilidad[ID_PAIS] → dim_geografia[ID_PAIS]
+   - fact_movilidad[ID_UNIVERSIDAD] → dim_universidad[ID_UNIVERSIDAD]
+   - fact_movilidad[ID_TIPO_MOVILIDAD] → dim_tipo_movilidad[ID_TIPO_MOVILIDAD]
 
-1. Instalar PostgreSQL
-2. Ejecutar script:
+### Opción 2: Conexión a PostgreSQL
+
+Para entornos de producción se recomienda utilizar una base de datos relacional:
+
+1. Instale PostgreSQL en su sistema
+2. Ejecute el script de creación de base de datos:
    ```bash
    psql -U postgres -f sql/crear_tablas_postgresql.sql
    ```
-3. Cargar datos CSV en PostgreSQL
-4. En Power BI: **Obtener datos** > **PostgreSQL**
-5. Conectar a base de datos `turismo_academico_medellin`
+3. Cargue los datos CSV en las tablas correspondientes
+4. En Power BI Desktop: **Obtener datos > PostgreSQL**
+5. Ingrese las credenciales y seleccione la base de datos `turismo_academico_medellin`
 
-**Guía completa:** Ver `outputs/reportes/guia_powerbi.txt`
-
----
-
-## 🎯 KPIs Principales
-
-| KPI | Descripción |
-|-----|-------------|
-| **Total Estudiantes** | Cantidad total de estudiantes internacionales |
-| **Países Representados** | Número de países de origen únicos |
-| **Duración Promedio** | Promedio de días de estadía |
-| **Impacto Económico Total** | Gasto estimado total (directo + multiplicador) |
-| **Tasa de Crecimiento** | Variación interanual de estudiantes |
-| **Top Países** | Principales 10 países de origen |
+Para mayor detalle, consulte la guía completa en `outputs/reportes/guia_powerbi.txt`
 
 ---
 
-## 🔍 Modelos Implementados
+## Indicadores Clave de Desempeño (KPIs)
 
-### 1. **Modelo ARIMA**
-- **Propósito:** Proyección de flujos futuros de movilidad
-- **Parámetros:** (p=1, d=1, q=1)
-- **Métricas:** RMSE, MAE, MAPE
-- **Horizonte:** 3 años (6 semestres)
+El sistema calcula los siguientes KPIs principales:
 
-### 2. **Regresión Lineal**
-- **Propósito:** Identificar variables influyentes en duración de movilidad
-- **Variables:** Año, Semestre, País, Tipo de movilidad, Financiación
-- **Métricas:** R², RMSE, MAE
-
-### 3. **Random Forest**
-- **Propósito:** Comparación de precisión predictiva
-- **Parámetros:** 100 árboles, profundidad máxima 10
-- **Output:** Importancia de características
+| Indicador | Descripción |
+|-----------|-------------|
+| Total Estudiantes | Cantidad acumulada de estudiantes internacionales |
+| Países Representados | Número de países de origen únicos |
+| Duración Promedio | Media de días de estadía por estudiante |
+| Impacto Económico Total | Estimación de gasto directo e indirecto (con multiplicador) |
+| Tasa de Crecimiento Anual | Variación porcentual interanual de llegadas |
+| Top 10 Países | Principales países de origen por volumen |
 
 ---
 
-## 📊 Visualizaciones Generadas
+## Modelos Analíticos Implementados
 
-El sistema genera automáticamente más de 10 gráficas profesionales:
+### 1. Modelo ARIMA
 
-- 📈 Evolución temporal de movilidad
-- 🌍 Distribución geográfica por país
-- 💰 Análisis de impacto económico
-- 📊 Comparación por universidad
-- 🔮 Proyecciones futuras ARIMA
-- 📉 Análisis de correlaciones
-- 🎯 Detección de outliers
+- **Propósito**: Proyección de series temporales de movilidad estudiantil
+- **Configuración**: ARIMA(p=1, d=1, q=1)
+- **Horizonte temporal**: 6 periodos académicos (3 años)
+- **Métricas de evaluación**: RMSE, MAE, MAPE
 
-Todas guardadas en `outputs/graficas/` en alta resolución (300 DPI).
+### 2. Regresión Lineal Múltiple
+
+- **Propósito**: Identificación de factores determinantes de la duración de movilidad
+- **Variables independientes**: Año, semestre, país de origen, tipo de movilidad, fuente de financiación
+- **Métricas**: Coeficiente de determinación (R²), RMSE, MAE
+
+### 3. Random Forest
+
+- **Propósito**: Modelo de contraste para validación de precisión
+- **Configuración**: 100 árboles de decisión, profundidad máxima de 10 niveles
+- **Output adicional**: Ranking de importancia de características
 
 ---
 
-## 🛠️ Solución de Problemas
+## Visualizaciones Generadas
 
-### Error: "ModuleNotFoundError"
+El sistema genera automáticamente más de 10 visualizaciones de calidad académica:
+
+- Evolución temporal de movilidad (serie de tiempo)
+- Distribución geográfica por país (gráfico de barras y mapas)
+- Análisis de impacto económico por periodo
+- Comparación entre universidades
+- Proyecciones futuras ARIMA con intervalos de confianza
+- Matriz de correlaciones
+- Boxplots para detección de outliers
+
+Todas las gráficas se guardan en formato PNG con resolución de 300 DPI en el directorio `outputs/graficas/`.
+
+---
+
+## Solución de Problemas Comunes
+
+### Error: ModuleNotFoundError
+
+Si aparece un error indicando que falta un módulo de Python:
+
 ```bash
 pip install -r requirements.txt --upgrade
 ```
 
-### Error: "FileNotFoundError"
-Verificar que los datos estén en `data/raw/iush.csv`
+### Error: FileNotFoundError
 
-### Jupyter no inicia
+Verifique que el archivo de datos esté ubicado en `data/raw/iush.csv`. Asegúrese de que la estructura de carpetas sea correcta.
+
+### Jupyter Notebook no inicia
+
+Reinstale Jupyter:
+
 ```bash
 pip install jupyter --upgrade
 jupyter notebook
 ```
 
-### Errores de codificación
-Los archivos CSV usan codificación UTF-8. Si hay problemas:
+### Problemas de codificación de caracteres
+
+Los archivos CSV utilizan codificación UTF-8. Si encuentra problemas al leer archivos:
+
 ```python
 df = pd.read_csv('archivo.csv', encoding='utf-8-sig')
 ```
 
 ---
 
-## 📝 Notas Importantes
+## Notas Importantes
 
-⚠️ **Datos actuales:** Solo se tienen datos de IUSH. Los datos de Universidad de Antioquia y UNAC se integrarán cuando estén disponibles.
+**Estado actual de los datos**: En la versión actual del proyecto, solo se cuenta con datos de la institución IUSH. Los datos de la Universidad de Antioquia y UNAC se integrarán una vez estén disponibles mediante las oficinas de internacionalización correspondientes.
 
-⚠️ **Proyecciones:** Las proyecciones ARIMA se basan en datos históricos limitados. Mayor cantidad de datos mejorará la precisión.
+**Limitaciones de las proyecciones**: Los modelos ARIMA se basan en datos históricos limitados. La precisión de las proyecciones mejorará significativamente con la incorporación de series temporales más extensas.
 
-⚠️ **Impacto económico:** Los cálculos usan estimaciones de gasto promedio ($50 USD/día) basadas en estudios de turismo educativo.
-
----
-
-## 📚 Documentación Adicional
-
-- **Guía Power BI:** `outputs/reportes/guia_powerbi.txt`
-- **Reporte Ejecutivo:** `outputs/reportes/reporte_ejecutivo_final.md`
-- **Reporte de Modelos:** `outputs/reportes/reporte_modelos.md`
-- **Calidad de Datos:** `outputs/reportes/reporte_calidad_datos.txt`
+**Estimaciones económicas**: Los cálculos de impacto económico utilizan un gasto promedio estimado de $50 USD por día, basado en estudios de referencia sobre turismo educativo internacional. Se aplica un multiplicador económico de 1.8x para contabilizar el efecto indirecto en la economía local.
 
 ---
 
-## 👥 Autor
+## Documentación Complementaria
 
-**Proyecto de Grado - Especialización**  
-Institución: [Tu Universidad]  
+El proyecto incluye documentación detallada adicional:
+
+- **Guía de integración Power BI**: `outputs/reportes/guia_powerbi.txt`
+- **Reporte ejecutivo final**: `outputs/reportes/reporte_ejecutivo_final.md`
+- **Documentación de modelos**: `outputs/reportes/reporte_modelos.md`
+- **Reporte de calidad de datos**: `outputs/reportes/reporte_calidad_datos.txt`
+
+---
+
+## Información del Proyecto
+
+**Proyecto de Grado - Especialización en Inteligencia de Negocios y Big Data**  
+Institución: [Nombre de la Universidad]  
 Fecha: Octubre 2025
 
 ---
 
-## 📄 Licencia
+## Licencia
 
-Este proyecto es de uso académico para fines de investigación en turismo académico.
-
----
-
-## 🙏 Agradecimientos
-
-- IUSH por proporcionar los datos de movilidad estudiantil
-- Universidad de Antioquia y UNAC (colaboración futura)
-- Comunidad de Python y librerías de código abierto
+Este proyecto tiene fines académicos y de investigación sobre el impacto del turismo académico en Medellín.
 
 ---
 
-## 🚀 Próximos Pasos
+## Agradecimientos
 
-1. ✅ **Ejecutar los 5 notebooks en orden**
-2. ✅ **Importar datos en Power BI**
-3. ⏳ **Integrar datos de UdeA y UNAC cuando estén disponibles**
-4. ⏳ **Automatizar actualización semestral**
-5. ⏳ **Presentar resultados a stakeholders**
+Se agradece especialmente a:
+
+- IUSH por facilitar los datos de movilidad estudiantil
+- Universidad de Antioquia y UNAC por su colaboración futura
+- Comunidades de desarrollo de Python, Pandas, Scikit-learn y demás librerías de código abierto
 
 ---
 
-**¡Sistema listo para uso!** 🎉
+## Próximos Pasos
 
-Para comenzar:
+1. Ejecutar los 5 notebooks en secuencia
+2. Importar el modelo dimensional en Power BI
+3. Integrar datos de Universidad de Antioquia y UNAC cuando estén disponibles
+4. Implementar sistema de actualización automática semestral
+5. Presentar resultados a stakeholders y oficinas de internacionalización
+
+---
+
+**Para iniciar el proyecto, ejecute:**
+
 ```bash
 pip install -r requirements.txt
 jupyter notebook notebooks/01_carga_exploracion_datos.ipynb
