@@ -1,0 +1,209 @@
+# ============================================================================
+# .gitignore para Proyecto de Grado - Arquitectura BI y Big Data
+# ============================================================================
+
+# ============================================================================
+# ENTORNOS VIRTUALES DE PYTHON
+# ============================================================================
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+*.virtualenv
+
+# ============================================================================
+# ARCHIVOS DE PYTHON
+# ============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ============================================================================
+# JUPYTER NOTEBOOK
+# ============================================================================
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+*.ipynb_checkpoints
+
+# ============================================================================
+# DATOS (ARCHIVOS GRANDES Y SENSIBLES)
+# ============================================================================
+
+# Datos crudos (pueden ser grandes y contener info sensible)
+data/raw/*.csv
+data/raw/*.xlsx
+data/raw/*.xls
+
+# EXCEPCIONES: Mantener un archivo de muestra pequeño
+!data/raw/iush.csv
+!data/raw/README.md
+
+# Datos procesados (se regeneran con los notebooks)
+data/processed/*.csv
+data/processed/*.xlsx
+data/processed/*.parquet
+
+# Resultados (se regeneran)
+data/results/*.csv
+data/results/*.xlsx
+
+# ============================================================================
+# OUTPUTS Y VISUALIZACIONES
+# ============================================================================
+
+# Gráficas generadas (se regeneran con notebooks)
+outputs/graficas/*.png
+outputs/graficas/*.jpg
+outputs/graficas/*.pdf
+outputs/graficas/*.svg
+
+# Reportes generados
+outputs/reportes/*.txt
+outputs/reportes/*.md
+outputs/reportes/*.pdf
+
+# EXCEPCIONES: Mantener archivos README
+!outputs/graficas/README.md
+!outputs/reportes/README.md
+
+# ============================================================================
+# BASE DE DATOS
+# ============================================================================
+*.db
+*.sqlite
+*.sqlite3
+
+# ============================================================================
+# IDEs Y EDITORES
+# ============================================================================
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ============================================================================
+# SISTEMA OPERATIVO
+# ============================================================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ============================================================================
+# TEMPORALES Y LOGS
+# ============================================================================
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.cache/
+
+# ============================================================================
+# CREDENCIALES Y CONFIGURACIÓN SENSIBLE
+# ============================================================================
+.env
+.env.local
+.env.*.local
+secrets.yaml
+credentials.json
+config.local.yaml
+
+# Archivos de configuración con credenciales
+**/config/local.py
+**/config/secrets.py
+
+# ============================================================================
+# POWER BI
+# ============================================================================
+*.pbix
+*.pbit
+
+# ============================================================================
+# COMPRESIÓN
+# ============================================================================
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# ============================================================================
+# DOCUMENTOS ESPECÍFICOS (OPCIONAL - Descomentar si aplica)
+# ============================================================================
+# *.docx
+# *.pdf
+# *.pptx
+
+# ============================================================================
+# ARCHIVOS DE PRUEBA
+# ============================================================================
+tests/__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# ============================================================================
+# NOTAS PERSONALES
+# ============================================================================
+NOTAS.md
+TODO.md
+BORRADOR.md
+
+# ============================================================================
+# FIN DEL .gitignore
+# ============================================================================
