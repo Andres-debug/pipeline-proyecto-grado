@@ -412,9 +412,52 @@ Se agradece especialmente a:
 
 ---
 
+## 📊 Datos Sintéticos
+
+El proyecto incluye un sistema de generación de datos sintéticos para ampliar el dataset disponible:
+
+### Archivos de Datos Disponibles
+
+**Estudiantes:**
+- `data/raw/iush.csv` - 27 registros reales
+- `data/raw/iush_sintetico.csv` - 500 registros sintéticos
+- `data/raw/iush_completo.csv` - 527 registros (reales + sintéticos) ✅ **Recomendado**
+
+**Docentes:**
+- `data/raw/docentes_exterior_sintetico.csv` - 200 registros sintéticos
+- `data/raw/docentes_exterior_sintetico.xlsx` - 200 registros sintéticos (Excel)
+
+### Generar Nuevos Datos Sintéticos
+
+Si necesitas más datos o diferentes distribuciones:
+
+```bash
+# Activar entorno virtual
+.venv\Scripts\Activate.ps1
+
+# Generar todos los datos sintéticos
+python scripts\generar_todos_datos_sinteticos.py
+
+# O generar individualmente
+python scripts\generar_datos_sinteticos.py          # Estudiantes
+python scripts\generar_datos_docentes_sinteticos.py # Docentes
+```
+
+**Consultar:** `scripts/README.md` para personalización avanzada (cantidad de registros, países, años, etc.)
+
+---
+
 **Para iniciar el proyecto, ejecute:**
 
 ```bash
+# 1. Instalar dependencias
 pip install -r requirements.txt
+
+# 2. (Opcional) Generar datos sintéticos adicionales
+python scripts\generar_todos_datos_sinteticos.py
+
+# 3. Iniciar análisis
 jupyter notebook notebooks/01_carga_exploracion_datos.ipynb
 ```
+
+**Nota:** El Notebook 02 está configurado para usar `iush_completo.csv` (datos reales + sintéticos) por defecto.
