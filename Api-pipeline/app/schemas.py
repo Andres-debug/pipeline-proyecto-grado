@@ -43,3 +43,36 @@ class GenerateSyntheticResponse(BaseModel):
     message: str
     file_path: str
     rows_generated: int
+
+
+class AirflowHealthResponse(BaseModel):
+    configured: bool
+    status: str
+    detail: dict[str, Any] = Field(default_factory=dict)
+
+
+class AirflowDagSummary(BaseModel):
+    dag_id: str
+    is_paused: bool | None = None
+    is_active: bool | None = None
+    description: str | None = None
+
+
+class AirflowDagsResponse(BaseModel):
+    total: int
+    dags: list[AirflowDagSummary] = Field(default_factory=list)
+
+
+class TriggerDagRunRequest(BaseModel):
+    conf: dict[str, Any] | None = None
+    dag_run_id: str | None = None
+    logical_date: datetime | None = None
+
+
+class AirflowDagRunResponse(BaseModel):
+    dag_id: str
+    dag_run_id: str | None = None
+    state: str | None = None
+    logical_date: datetime | None = None
+    start_date: datetime | None = None
+    end_date: datetime | None = None

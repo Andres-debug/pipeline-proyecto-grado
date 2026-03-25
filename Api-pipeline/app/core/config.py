@@ -7,7 +7,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
-load_dotenv()
+PROJECT_DIR = Path(__file__).resolve().parents[2]
+ENV_PATH = PROJECT_DIR / ".env"
+load_dotenv(dotenv_path=ENV_PATH)
 
 
 @dataclass(frozen=True)
@@ -25,11 +27,23 @@ class Settings:
     column_mapping_path: Path
     db_url: str | None
     db_schema: str
+    airflow_api_base_url: str | None
+    airflow_username: str | None
+    airflow_password: str | None
+    airflow_timeout_seconds: int
+    airflow_verify_ssl: bool
 
 
 def _resolve_path(base: Path, value: str) -> Path:
     path = Path(value)
     return path if path.is_absolute() else (base / path).resolve()
+
+
+def _get_bool_env(name: str, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
 def get_settings() -> Settings:
@@ -51,6 +65,11 @@ def get_settings() -> Settings:
 
     db_url = os.getenv("DB_URL") or None
     db_schema = os.getenv("DB_SCHEMA", "public")
+    airflow_api_base_url = os.getenv("AIRFLOW_API_BASE_URL") or None
+    airflow_username = os.getenv("AIRFLOW_USERNAME") or None
+    airflow_password = os.getenv("AIRFLOW_PASSWORD") or None
+    airflow_timeout_seconds = int(os.getenv("AIRFLOW_TIMEOUT_SECONDS", "30"))
+    airflow_verify_ssl = _get_bool_env("AIRFLOW_VERIFY_SSL", True)
 
     return Settings(
         app_name=app_name,
@@ -66,6 +85,11 @@ def get_settings() -> Settings:
         column_mapping_path=column_mapping_path,
         db_url=db_url,
         db_schema=db_schema,
+        airflow_api_base_url=airflow_api_base_url,
+        airflow_username=airflow_username,
+        airflow_password=airflow_password,
+        airflow_timeout_seconds=airflow_timeout_seconds,
+        airflow_verify_ssl=airflow_verify_ssl,
     )
 
 
