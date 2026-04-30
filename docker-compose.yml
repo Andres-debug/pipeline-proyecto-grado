@@ -60,7 +60,7 @@ services:
     depends_on:
       - api
     ports:
-      - "80:80"
+      - "${FRONTEND_PORT:-8081}:80"
     networks:
       - app-net
 
