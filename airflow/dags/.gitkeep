@@ -1,0 +1,2 @@
+# Coloca aqui los archivos DAG de Airflow (archivos .py)
+# Este directorio se monta como volumen en los contenedores airflow-webserver y airflow-scheduler

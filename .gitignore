@@ -158,6 +158,18 @@ $RECYCLE.BIN/
 .env.local
 .env.*.local
 secrets.yaml
+
+# ============================================================================
+# DOCKER / CONTENEDORES
+# ============================================================================
+
+# Logs generados por Airflow en runtime
+airflow/logs/*
+!airflow/logs/.gitkeep
+
+# Build del frontend (se regenera en el contenedor)
+front-example/dist/
+front-example/node_modules/
 credentials.json
 config.local.yaml
 
