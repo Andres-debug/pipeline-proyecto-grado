@@ -32,7 +32,7 @@ services:
       APP_ENV: production
       APP_HOST: 0.0.0.0
       APP_PORT: "8000"
-      DB_URL: postgresql+psycopg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/pipeline
+      DB_URL: postgresql+psycopg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/turismo_academico_medellin
       DATA_BASE_DIR: /data
       RAW_DIR: /data/data/raw
       PROCESSED_DIR: /data/data/processed
