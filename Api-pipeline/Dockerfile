@@ -2,9 +2,8 @@
 FROM python:3.12-slim AS builder
 WORKDIR /build
 COPY requirements.txt .
-# numpy>=2.0 usa X86_V2 (AVX/SSE4.2) que CPUs viejos no soportan.
-# Compilamos numpy desde source para garantizar compatibilidad con el host.
-RUN pip install --no-cache-dir --prefix=/install --no-binary numpy -r requirements.txt
+# numpy<2.0 no requiere X86_V2 (AVX/SSE4.2) — compatible con CPUs viejos.
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # ── Stage 2: imagen final ligera ─────────────────────────────────────────────
 FROM python:3.12-slim
