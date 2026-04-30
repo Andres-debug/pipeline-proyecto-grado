@@ -9,3 +9,4 @@ SQLAlchemy>=2.0.41
 psycopg[binary]>=3.2
 alembic>=1.14
 httpx>=0.28
+python-multipart>=0.0.9

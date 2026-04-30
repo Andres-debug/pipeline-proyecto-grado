@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+from pathlib import Path
+from uuid import uuid4
+
 from fastapi import APIRouter, HTTPException
+from fastapi import File, UploadFile
 
 from app.airflow.service import (
     AirflowClientError,
@@ -10,6 +14,7 @@ from app.airflow.service import (
     list_dags,
     trigger_dag_run,
 )
+from app.core.config import settings
 from app.pipeline.service import pipeline_service
 from app.schemas import (
     AirflowDagsResponse,
@@ -56,6 +61,58 @@ def run_pipeline(payload: RunPipelineRequest) -> RunPipelineResponse:
         )
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@router.post("/pipeline/upload-run", response_model=RunPipelineResponse)
+def upload_and_run_pipeline(files: list[UploadFile] = File(...)) -> RunPipelineResponse:
+    allowed_suffixes = {".csv", ".xlsx", ".xls", ".json"}
+    saved_files: list[str] = []
+
+    try:
+        settings.raw_dir.mkdir(parents=True, exist_ok=True)
+
+        for upload in files:
+            if not upload.filename:
+                raise HTTPException(status_code=400, detail="Se recibió un archivo sin nombre.")
+
+            suffix = Path(upload.filename).suffix.lower()
+            if suffix not in allowed_suffixes:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Formato no soportado: {upload.filename}. Solo CSV, XLS, XLSX o JSON.",
+                )
+
+            safe_name = Path(upload.filename).name.replace(" ", "_")
+            target_name = f"upload_{uuid4().hex}_{safe_name}"
+            target_path = settings.raw_dir / target_name
+
+            content = upload.file.read()
+            if not content:
+                raise HTTPException(status_code=400, detail=f"El archivo {upload.filename} está vacío.")
+
+            target_path.write_bytes(content)
+            saved_files.append(target_name)
+
+        result = pipeline_service.run(input_files=saved_files, auto_discover=False)
+        warnings = list(result.warnings)
+        warnings.append(f"Archivos cargados por API: {', '.join(saved_files)}")
+
+        return RunPipelineResponse(
+            status="success",
+            message="Archivos cargados y pipeline ejecutado correctamente",
+            rows_consolidated=result.rows_consolidated,
+            output_files=result.output_files,
+            dimensions=result.dimensions,
+            kpis_total=result.kpis_total,
+            warnings=warnings,
+        )
+    except HTTPException:
+        raise
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+    finally:
+        for upload in files:
+            upload.file.close()
 
 
 @router.post("/pipeline/generate-synthetic", response_model=GenerateSyntheticResponse)

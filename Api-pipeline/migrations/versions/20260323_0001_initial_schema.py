@@ -61,7 +61,7 @@ def upgrade() -> None:
     op.create_table(
         "dim_tipo_movilidad",
         sa.Column("id_tipo_movilidad", sa.Integer(), nullable=False),
-        sa.Column("tipo_mov_est_extranj", sa.String(length=100), nullable=False),
+        sa.Column("tipo_mov_est_extranj", sa.Text(), nullable=False),
         sa.PrimaryKeyConstraint("id_tipo_movilidad"),
         sa.UniqueConstraint("tipo_mov_est_extranj"),
         schema=schema,

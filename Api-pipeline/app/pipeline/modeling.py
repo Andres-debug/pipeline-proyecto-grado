@@ -24,7 +24,9 @@ def classify_region(country: Any) -> str:
 
 
 def build_dim_tiempo(df: pd.DataFrame) -> pd.DataFrame:
-    dim_tiempo = df[["AÑO", "SEMESTRE", "PERIODO"]].drop_duplicates().reset_index(drop=True)
+    dim_tiempo = df[["AÑO", "SEMESTRE", "PERIODO"]].copy()
+    dim_tiempo = dim_tiempo.dropna(subset=["AÑO", "SEMESTRE"])
+    dim_tiempo = dim_tiempo.drop_duplicates().reset_index(drop=True)
     dim_tiempo["ID_TIEMPO"] = range(1, len(dim_tiempo) + 1)
     dim_tiempo["TRIMESTRE"] = dim_tiempo["SEMESTRE"].apply(lambda value: 1 if value == 1 else 2)
     dim_tiempo["ANIO_SEMESTRE"] = dim_tiempo["AÑO"].astype(str) + "-S" + dim_tiempo["SEMESTRE"].astype(str)
@@ -32,7 +34,10 @@ def build_dim_tiempo(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_dim_geografia(df: pd.DataFrame) -> pd.DataFrame:
-    dim_geografia = df[["PAIS_EXTRANJERO"]].drop_duplicates().reset_index(drop=True)
+    dim_geografia = df[["PAIS_EXTRANJERO"]].copy()
+    dim_geografia = dim_geografia.dropna(subset=["PAIS_EXTRANJERO"])
+    dim_geografia = dim_geografia[dim_geografia["PAIS_EXTRANJERO"].astype("string").str.strip() != ""]
+    dim_geografia = dim_geografia.drop_duplicates().reset_index(drop=True)
     dim_geografia["ID_PAIS"] = range(1, len(dim_geografia) + 1)
     dim_geografia["REGION"] = dim_geografia["PAIS_EXTRANJERO"].apply(classify_region)
     return dim_geografia[["ID_PAIS", "PAIS_EXTRANJERO", "REGION"]].copy()
@@ -61,7 +66,10 @@ def build_dim_universidad(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_dim_tipo_movilidad(df: pd.DataFrame) -> pd.DataFrame:
-    dim_tipo = df[["TIPO_MOV_EST_EXTRANJ"]].drop_duplicates().reset_index(drop=True)
+    dim_tipo = df[["TIPO_MOV_EST_EXTRANJ"]].copy()
+    dim_tipo = dim_tipo.dropna(subset=["TIPO_MOV_EST_EXTRANJ"])
+    dim_tipo = dim_tipo[dim_tipo["TIPO_MOV_EST_EXTRANJ"].astype("string").str.strip() != ""]
+    dim_tipo = dim_tipo.drop_duplicates().reset_index(drop=True)
     dim_tipo["ID_TIPO_MOVILIDAD"] = range(1, len(dim_tipo) + 1)
     return dim_tipo[["ID_TIPO_MOVILIDAD", "TIPO_MOV_EST_EXTRANJ"]].copy()
 
@@ -102,6 +110,16 @@ def build_fact_movilidad(
             "ES_SINTETICO",
         ]
     ].copy()
+
+    fact_final["ID_HECHO"] = range(1, len(fact_final) + 1)
+
+    # Evita violaciones NOT NULL/FK al cargar en PostgreSQL.
+    fact_final = fact_final.dropna(
+        subset=["ID_TIEMPO", "ID_PAIS", "ID_UNIVERSIDAD", "ID_TIPO_MOVILIDAD", "ES_SINTETICO"]
+    ).copy()
+
+    for key_col in ["ID_TIEMPO", "ID_PAIS", "ID_UNIVERSIDAD", "ID_TIPO_MOVILIDAD", "ES_SINTETICO"]:
+        fact_final[key_col] = fact_final[key_col].astype(int)
 
     fact_final["ID_HECHO"] = range(1, len(fact_final) + 1)
 

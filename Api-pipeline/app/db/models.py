@@ -50,7 +50,7 @@ class DimTipoMovilidad(Base):
     __table_args__ = {"schema": settings.db_schema}
 
     id_tipo_movilidad: Mapped[int] = mapped_column(Integer, primary_key=True)
-    tipo_mov_est_extranj: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
+    tipo_mov_est_extranj: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
 
 
 class FactMovilidad(Base):
