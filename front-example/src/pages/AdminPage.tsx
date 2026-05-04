@@ -1,4 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
+import {
+  HiArrowPath,
+  HiCheckCircle,
+  HiCircleStack,
+  HiCpuChip,
+  HiExclamationCircle,
+  HiInboxArrowDown,
+  HiPlay,
+  HiSparkles,
+  HiTableCells,
+  HiWrenchScrewdriver,
+} from 'react-icons/hi2'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
 
@@ -32,13 +44,14 @@ type TriggerResult = {
 }
 
 function StatusBadge({ ok, label }: { ok: boolean; label: string }) {
+  const Icon = ok ? HiCheckCircle : HiExclamationCircle
   return (
     <span
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
         ok ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
       }`}
     >
-      <span className={`h-1.5 w-1.5 rounded-full ${ok ? 'bg-emerald-500' : 'bg-red-500'}`} />
+      <Icon className="h-3.5 w-3.5" />
       {label}
     </span>
   )
@@ -48,30 +61,34 @@ const ARCHITECTURE_LAYERS = [
   {
     color: 'bg-amber-50 border-amber-200',
     badge: 'bg-amber-100 text-amber-800',
+    iconColor: 'text-amber-600',
     title: 'Bronze — Ingesta raw',
     description: 'Archivos CSV/XLSX subidos via portal o API. Se almacenan sin transformar.',
-    icon: '📥',
+    Icon: HiInboxArrowDown,
   },
   {
     color: 'bg-sky-50 border-sky-200',
     badge: 'bg-sky-100 text-sky-800',
+    iconColor: 'text-sky-600',
     title: 'Silver — Limpieza',
     description: 'Estandarización de columnas, manejo de nulos, tipos de datos correctos.',
-    icon: '🔧',
+    Icon: HiWrenchScrewdriver,
   },
   {
     color: 'bg-violet-50 border-violet-200',
     badge: 'bg-violet-100 text-violet-800',
+    iconColor: 'text-violet-600',
     title: 'Gold — Star Schema',
     description: 'Dimensiones y tabla de hechos cargadas en PostgreSQL para consumo BI.',
-    icon: '⭐',
+    Icon: HiSparkles,
   },
   {
     color: 'bg-emerald-50 border-emerald-200',
     badge: 'bg-emerald-100 text-emerald-800',
+    iconColor: 'text-emerald-600',
     title: 'Power BI',
     description: 'Reportes embebidos conectados directamente al modelo estrella en Postgres.',
-    icon: '📊',
+    Icon: HiTableCells,
   },
 ]
 
@@ -151,7 +168,7 @@ export function AdminPage() {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {ARCHITECTURE_LAYERS.map((layer) => (
             <div key={layer.title} className={`rounded-2xl border p-4 ${layer.color}`}>
-              <span className="text-2xl">{layer.icon}</span>
+              <layer.Icon className={`h-6 w-6 ${layer.iconColor}`} />
               <span className={`mt-2 inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${layer.badge}`}>
                 {layer.title}
               </span>
@@ -164,13 +181,17 @@ export function AdminPage() {
       {/* ── Salud Airflow ──────────────────────────────────────────────── */}
       <div>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-base font-semibold text-slate-800">Estado de Airflow</h3>
+          <h3 className="flex items-center gap-2 text-base font-semibold text-slate-800">
+            <HiCpuChip className="h-5 w-5 text-blue-600" />
+            Estado de Airflow
+          </h3>
           <button
             type="button"
             onClick={fetchHealth}
             disabled={loadingHealth}
-            className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
           >
+            <HiArrowPath className={`h-3.5 w-3.5 ${loadingHealth ? 'animate-spin' : ''}`} />
             {loadingHealth ? 'Actualizando…' : 'Actualizar'}
           </button>
         </div>
@@ -230,8 +251,9 @@ export function AdminPage() {
             type="button"
             onClick={fetchDags}
             disabled={loadingDags}
-            className="rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
           >
+            <HiArrowPath className={`h-3.5 w-3.5 ${loadingDags ? 'animate-spin' : ''}`} />
             {loadingDags ? 'Actualizando…' : 'Actualizar'}
           </button>
         </div>
@@ -246,7 +268,8 @@ export function AdminPage() {
           </div>
         ) : dags && dags.total === 0 ? (
           <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center">
-            <p className="text-sm font-medium text-slate-500">No hay DAGs registrados aún.</p>
+            <HiCircleStack className="mx-auto h-8 w-8 text-slate-300" />
+            <p className="mt-3 text-sm font-medium text-slate-500">No hay DAGs registrados aún.</p>
             <p className="mt-1 text-xs text-slate-400">
               Crea archivos <code className="rounded bg-slate-100 px-1 py-0.5">*.py</code> en{' '}
               <code className="rounded bg-slate-100 px-1 py-0.5">airflow/dags/</code> y haz git push.
@@ -295,15 +318,25 @@ export function AdminPage() {
                               result.state.startsWith('Error') ? 'text-red-600' : 'text-emerald-600'
                             }`}
                           >
-                            {result.state.startsWith('Error') ? result.state : `✓ ${result.state}`}
+                              {result.state.startsWith('Error') ? (
+                                result.state
+                              ) : (
+                                <span className="inline-flex items-center gap-1">
+                                  <HiCheckCircle className="h-3.5 w-3.5" />
+                                  {result.state}
+                                </span>
+                              )}
                           </span>
                         ) : (
                           <button
                             type="button"
                             onClick={() => handleTrigger(dag.dag_id)}
                             disabled={isLoading || dag.is_paused}
-                            className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
                           >
+                            {isLoading
+                              ? <HiArrowPath className="h-3.5 w-3.5 animate-spin" />
+                              : <HiPlay className="h-3.5 w-3.5" />}
                             {isLoading ? 'Lanzando…' : 'Ejecutar'}
                           </button>
                         )}
