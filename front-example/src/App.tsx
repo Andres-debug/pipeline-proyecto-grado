@@ -1,9 +1,11 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { PortalLayout } from './layouts/PortalLayout'
+import { AdminPage } from './pages/AdminPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { DatosPage } from './pages/DatosPage'
 import { LoginPage } from './pages/LoginPage'
 import { PerfilPage } from './pages/PerfilPage'
+import { RequireAdmin } from './routes/RequireAdmin'
 import { RequireAuth } from './routes/RequireAuth'
 
 function App() {
@@ -18,6 +20,10 @@ function App() {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="datos" element={<DatosPage />} />
             <Route path="perfil" element={<PerfilPage />} />
+
+            <Route element={<RequireAdmin />}>
+              <Route path="admin" element={<AdminPage />} />
+            </Route>
           </Route>
         </Route>
 

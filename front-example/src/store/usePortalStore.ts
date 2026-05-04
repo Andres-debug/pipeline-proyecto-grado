@@ -1,9 +1,12 @@
 import { create } from 'zustand'
 
+export type UserRole = 'admin' | 'user'
+
 type UniversityUser = {
   email: string
   password: string
   universityName: string
+  role: UserRole
 }
 
 type UploadedFileInfo = {
@@ -25,19 +28,16 @@ type PortalState = {
 
 const mockUsers: UniversityUser[] = [
   {
-    email: 'admin@universidada.edu.co',
-    password: 'demo123',
-    universityName: 'Universidad A',
+    email: 'admin@travelunidata.edu.co',
+    password: 'admin2024',
+    universityName: 'TravelUniData — Admin',
+    role: 'admin',
   },
   {
-    email: 'admin@universidadb.edu.co',
+    email: 'universidad@demo.edu.co',
     password: 'demo123',
-    universityName: 'Universidad B',
-  },
-  {
-    email: 'admin@universidadc.edu.co',
-    password: 'demo123',
-    universityName: 'Universidad C',
+    universityName: 'Universidad Demo',
+    role: 'user',
   },
 ]
 
@@ -56,7 +56,7 @@ export const usePortalStore = create<PortalState>((set) => ({
     }
 
     set({
-      currentUser: { email: user.email, universityName: user.universityName },
+      currentUser: { email: user.email, universityName: user.universityName, role: user.role },
       loginError: null,
     })
     return true

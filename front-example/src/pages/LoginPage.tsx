@@ -6,8 +6,8 @@ import { usePortalStore } from '../store/usePortalStore'
 
 export function LoginPage() {
   const { currentUser, login, loginError, clearLoginError } = usePortalStore()
-  const [email, setEmail] = useState('admin@universidada.edu.co')
-  const [password, setPassword] = useState('demo123')
+  const [email, setEmail] = useState('admin@travelunidata.edu.co')
+  const [password, setPassword] = useState('admin2024')
 
   const handleLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -78,9 +78,10 @@ export function LoginPage() {
 
             <div className="mt-4 rounded-xl bg-white px-4 py-3 text-xs text-slate-600">
               <p className="font-semibold text-slate-700">Credenciales demo</p>
-              <p className="mt-1">admin@universidada.edu.co / demo123</p>
-              <p>admin@universidadb.edu.co / demo123</p>
-              <p>admin@universidadc.edu.co / demo123</p>
+              <p className="mt-1 font-medium text-blue-700">Admin (pipeline + Airflow)</p>
+              <p>admin@travelunidata.edu.co / admin2024</p>
+              <p className="mt-1 font-medium text-slate-600">Usuario (PowerBI + carga)</p>
+              <p>universidad@demo.edu.co / demo123</p>
             </div>
           </div>
 

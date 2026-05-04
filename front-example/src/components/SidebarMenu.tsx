@@ -1,21 +1,37 @@
 import type { ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
+import type { UserRole } from '../store/usePortalStore'
 
 type SidebarMenuProps = {
   onLogout: () => void
   universityName: string
+  role: UserRole
 }
 
 type MenuItem = {
   label: string
-  to: '/dashboard' | '/datos' | '/perfil'
+  to: '/dashboard' | '/datos' | '/perfil' | '/admin'
   icon: ReactNode
+  roles: UserRole[]
 }
 
 const menuItems: MenuItem[] = [
   {
+    label: 'Admin Pipeline',
+    to: '/admin',
+    roles: ['admin'],
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
+        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
     label: 'Dashboard',
     to: '/dashboard',
+    roles: ['admin', 'user'],
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
         <path d="M4 4H10V10H4V4ZM14 4H20V10H14V4ZM4 14H10V20H4V14ZM14 14H20V20H14V14Z" stroke="currentColor" strokeWidth="1.8" />
@@ -25,6 +41,7 @@ const menuItems: MenuItem[] = [
   {
     label: 'Datos',
     to: '/datos',
+    roles: ['admin', 'user'],
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
         <path d="M5 4H19V20H5V4Z" stroke="currentColor" strokeWidth="1.8" />
@@ -35,6 +52,7 @@ const menuItems: MenuItem[] = [
   {
     label: 'Perfil',
     to: '/perfil',
+    roles: ['admin', 'user'],
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
         <path d="M12 12C14.4853 12 16.5 9.98528 16.5 7.5C16.5 5.01472 14.4853 3 12 3C9.51472 3 7.5 5.01472 7.5 7.5C7.5 9.98528 9.51472 12 12 12Z" stroke="currentColor" strokeWidth="1.8" />
@@ -44,7 +62,9 @@ const menuItems: MenuItem[] = [
   },
 ]
 
-export function SidebarMenu({ onLogout, universityName }: SidebarMenuProps) {
+export function SidebarMenu({ onLogout, universityName, role }: SidebarMenuProps) {
+  const visibleItems = menuItems.filter((item) => item.roles.includes(role))
+
   return (
     <aside className="flex w-[84px] shrink-0 flex-col bg-[#0b1022] p-3 text-slate-100 md:w-[280px] md:p-5">
       <div>
@@ -52,10 +72,15 @@ export function SidebarMenu({ onLogout, universityName }: SidebarMenuProps) {
         <p className="text-center text-lg font-bold text-blue-100 md:hidden">TU</p>
         <h1 className="mt-2 hidden text-lg font-bold text-white md:block">Panel Institucional</h1>
         <p className="mt-1 hidden text-xs text-slate-400 md:block">{universityName}</p>
+        {role === 'admin' && (
+          <span className="mt-2 hidden rounded-full bg-blue-600/30 px-2 py-0.5 text-xs font-semibold text-blue-300 md:inline-block">
+            Administrador
+          </span>
+        )}
       </div>
 
       <nav className="mt-5 space-y-2 md:mt-8">
-        {menuItems.map((item) => (
+        {visibleItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
