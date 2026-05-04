@@ -1,6 +1,6 @@
 const powerBiEmbedUrl =
   import.meta.env.VITE_POWERBI_EMBED_URL ??
-  'https://app.powerbi.com/reportEmbed?reportId=&groupId=&autoAuth=true&ctid='
+  'https://app.powerbi.com/view?r=eyJrIjoiMDMyOTFmZWUtYTIwNC00YmJkLWI4MGUtMDZkMjUwMTVjZDUxIiwidCI6IjRkZDEzM2ZkLWNhMmEtNDA5OC1hZTkxLTBlYWEwYzU4MjNiOCIsImMiOjR9'
 
 export function DashboardPage() {
   return (
