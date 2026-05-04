@@ -119,7 +119,7 @@ export function AdminPage() {
     setLoadingDags(true)
     setDagsError(null)
     try {
-      const response = await fetch(`${API_BASE}/airflow/dags`)
+      const response = await fetch(`${API_BASE}/airflow/dags?only_active=false`)
       if (!response.ok) {
         const body = await response.json().catch(() => ({}))
         throw new Error(body.detail ?? `HTTP ${response.status}`)
