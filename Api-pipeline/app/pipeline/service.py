@@ -89,7 +89,7 @@ class PipelineService:
         if university_override:
             mapped_df["UNIVERSIDAD"] = university_override
         else:
-            mapped_df["UNIVERSIDAD"] = mapped_df["UNIVERSIDAD"].fillna(display_name)
+            mapped_df["UNIVERSIDAD"] = mapped_df["UNIVERSIDAD"].fillna("No especificada")
         return mapped_df, None
 
     @staticmethod
@@ -110,6 +110,8 @@ class PipelineService:
         file_name = file_path.name.lower()
         if "docente" in file_name:
             return "docentes_exterior"
+        if "movilidad" in file_name and "exterior" in file_name:
+            return "movilidad_exterior"
         return "iush"
 
     @staticmethod

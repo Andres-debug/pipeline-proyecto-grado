@@ -31,7 +31,7 @@ class DimGeografia(Base):
     __table_args__ = {"schema": settings.db_schema}
 
     id_pais: Mapped[int] = mapped_column(Integer, primary_key=True)
-    pais_extranjero: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
+    pais_extranjero: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     region: Mapped[str] = mapped_column(String(50), nullable=False)
 
 
@@ -40,7 +40,7 @@ class DimUniversidad(Base):
     __table_args__ = {"schema": settings.db_schema}
 
     id_universidad: Mapped[int] = mapped_column(Integer, primary_key=True)
-    nombre_universidad: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
+    nombre_universidad: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     tipo: Mapped[str | None] = mapped_column(String(20), nullable=True)
     ciudad: Mapped[str] = mapped_column(String(50), nullable=False)
 
