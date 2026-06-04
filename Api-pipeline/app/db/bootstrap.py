@@ -25,7 +25,7 @@ def ensure_database_exists() -> bool:
         raise ValueError("DB_URL debe incluir el nombre de la base de datos")
 
     target_database = db_url.database
-    admin_database = "postgres"
+    admin_database = db_url.database
 
     with psycopg.connect(
         dbname=admin_database,
