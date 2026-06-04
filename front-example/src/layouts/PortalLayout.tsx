@@ -74,7 +74,9 @@ export function PortalLayout() {
 
             {/* Content */}
             <main className="flex-1 overflow-auto p-4 sm:p-5 md:p-8">
-              <Outlet />
+              <div key={location.pathname} className="page-transition">
+                <Outlet />
+              </div>
             </main>
           </div>
         </div>
