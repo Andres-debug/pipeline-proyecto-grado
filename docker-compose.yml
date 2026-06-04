@@ -1,38 +1,16 @@
 services:
 
-  # ── PgBouncer: pooler de conexiones ───────────────────────────────────────
-  pgbouncer:
-    image: edoburu/pgbouncer:latest
-    restart: unless-stopped
-    environment:
-      DB_USER: ${AIVEN_USER}
-      DB_PASSWORD: ${AIVEN_PASSWORD}
-      DB_HOST: ${AIVEN_HOST}
-      DB_PORT: ${AIVEN_PORT}
-      DB_NAME: ${AIVEN_DB}
-      POOL_MODE: session
-      MAX_CLIENT_CONN: "50"
-      DEFAULT_POOL_SIZE: "5"
-      SERVER_TLS_SSLMODE: require
-      AUTH_TYPE: plain
-    ports:
-      - "5432:5432"
-    networks:
-      - app-net
-
   # ── API FastAPI ────────────────────────────────────────────────────────────
   api:
     build:
       context: ./Api-pipeline
       dockerfile: Dockerfile
     restart: unless-stopped
-    depends_on:
-      - pgbouncer
     environment:
       APP_ENV: production
       APP_HOST: 0.0.0.0
       APP_PORT: "8000"
-      DB_URL: postgresql+psycopg://${AIVEN_USER}:${AIVEN_PASSWORD}@pgbouncer:5432/${AIVEN_DB}
+      DB_URL: postgresql+psycopg://${AIVEN_USER}:${AIVEN_PASSWORD}@${AIVEN_HOST}:${AIVEN_PORT}/${AIVEN_DB}?sslmode=require
       DATA_BASE_DIR: /data
       RAW_DIR: /data/data/raw
       PROCESSED_DIR: /data/data/processed
@@ -80,15 +58,11 @@ services:
           --role Admin \
           --email "${AIRFLOW_ADMIN_EMAIL:-admin@example.com}" || true
     environment:
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIVEN_USER}:${AIVEN_PASSWORD}@pgbouncer:5432/${AIVEN_DB}
-      AIRFLOW__DATABASE__SQL_ALCHEMY_POOL_SIZE: "1"
-      AIRFLOW__DATABASE__SQL_ALCHEMY_MAX_OVERFLOW: "0"
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIVEN_USER}:${AIVEN_PASSWORD}@${AIVEN_HOST}:${AIVEN_PORT}/${AIVEN_DB}?sslmode=require
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY}
       AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY}
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-    depends_on:
-      - pgbouncer
     networks:
       - app-net
 
@@ -100,16 +74,14 @@ services:
     ports:
       - "${AIRFLOW_PORT:-18080}:8080"
     environment:
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIVEN_USER}:${AIVEN_PASSWORD}@pgbouncer:5432/${AIVEN_DB}
-      AIRFLOW__DATABASE__SQL_ALCHEMY_POOL_SIZE: "1"
-      AIRFLOW__DATABASE__SQL_ALCHEMY_MAX_OVERFLOW: "0"
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIVEN_USER}:${AIVEN_PASSWORD}@${AIVEN_HOST}:${AIVEN_PORT}/${AIVEN_DB}?sslmode=require
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY}
       AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY}
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
       AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "false"
-      AIRFLOW__WEBSERVER__WORKERS: "1"
+      AIRFLOW__WEBSERVER__WORKERS: "2"
       AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
     volumes:
       - ./airflow/dags:/opt/airflow/dags
@@ -133,9 +105,7 @@ services:
     restart: unless-stopped
     command: scheduler
     environment:
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIVEN_USER}:${AIVEN_PASSWORD}@pgbouncer:5432/${AIVEN_DB}
-      AIRFLOW__DATABASE__SQL_ALCHEMY_POOL_SIZE: "1"
-      AIRFLOW__DATABASE__SQL_ALCHEMY_MAX_OVERFLOW: "0"
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIVEN_USER}:${AIVEN_PASSWORD}@${AIVEN_HOST}:${AIVEN_PORT}/${AIVEN_DB}?sslmode=require
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY}
       AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY}
