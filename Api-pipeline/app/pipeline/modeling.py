@@ -163,4 +163,4 @@ def build_kpis(df: pd.DataFrame) -> pd.DataFrame:
         "Tasa_Crecimiento_Anual_Pct": 0.0,
     }
 
-    return pd.DataFrame(list(kpis.items()), columns=["KPI", "Valor"])
+    return pd.DataFrame(list(kpis.items()), columns=["KPI", "VALOR"])

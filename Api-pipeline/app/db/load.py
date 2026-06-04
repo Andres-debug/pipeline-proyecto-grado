@@ -18,53 +18,8 @@ def load_star_to_postgres(
     schema = settings.db_schema
     engine = get_engine()
 
-    dim_tiempo_db = dim_tiempo.rename(
-        columns={
-            "ID_TIEMPO": "id_tiempo",
-            "AÑO": "anio",
-            "SEMESTRE": "semestre",
-            "TRIMESTRE": "trimestre",
-            "PERIODO": "periodo",
-            "ANIO_SEMESTRE": "anio_semestre",
-        }
-    )
-    dim_geografia_db = dim_geografia.rename(
-        columns={
-            "ID_PAIS": "id_pais",
-            "PAIS_EXTRANJERO": "pais_extranjero",
-            "REGION": "region",
-        }
-    )
-    dim_universidad_db = dim_universidad.rename(
-        columns={
-            "ID_UNIVERSIDAD": "id_universidad",
-            "NOMBRE_UNIVERSIDAD": "nombre_universidad",
-            "TIPO": "tipo",
-            "CIUDAD": "ciudad",
-        }
-    )
-    dim_tipo_movilidad_db = dim_tipo_movilidad.rename(
-        columns={
-            "ID_TIPO_MOVILIDAD": "id_tipo_movilidad",
-            "TIPO_MOV_EST_EXTRANJ": "tipo_mov_est_extranj",
-        }
-    )
-    fact_movilidad_db = fact_movilidad.rename(
-        columns={
-            "ID_HECHO": "id_hecho",
-            "ID_TIEMPO": "id_tiempo",
-            "ID_PAIS": "id_pais",
-            "ID_UNIVERSIDAD": "id_universidad",
-            "ID_TIPO_MOVILIDAD": "id_tipo_movilidad",
-            "NUM_DIAS_MOVILIDAD": "num_dias_movilidad",
-            "FINANCIACION_TOTAL": "financiacion_total",
-            "GASTO_ESTIMADO_DIRECTO": "gasto_estimado_directo",
-            "GASTO_ESTIMADO_TOTAL": "gasto_estimado_total",
-            "ES_SINTETICO": "es_sintetico",
-        }
-    )
-    kpis_db = kpis.rename(columns={"KPI": "kpi", "Valor": "valor"}).copy()
-    kpis_db["valor"] = kpis_db["valor"].astype(str)
+    kpis_db = kpis.copy()
+    kpis_db["VALOR"] = kpis_db["VALOR"].astype(str)
 
     with engine.begin() as connection:
         connection.execute(text(f'TRUNCATE TABLE "{schema}"."fact_movilidad" RESTART IDENTITY CASCADE'))
@@ -74,11 +29,11 @@ def load_star_to_postgres(
         connection.execute(text(f'TRUNCATE TABLE "{schema}"."dim_tipo_movilidad" RESTART IDENTITY CASCADE'))
         connection.execute(text(f'TRUNCATE TABLE "{schema}"."kpis_movilidad" RESTART IDENTITY CASCADE'))
 
-    dim_tiempo_db.to_sql("dim_tiempo", engine, schema=schema, if_exists="append", index=False)
-    dim_geografia_db.to_sql("dim_geografia", engine, schema=schema, if_exists="append", index=False)
-    dim_universidad_db.to_sql("dim_universidad", engine, schema=schema, if_exists="append", index=False)
-    dim_tipo_movilidad_db.to_sql("dim_tipo_movilidad", engine, schema=schema, if_exists="append", index=False)
-    fact_movilidad_db.to_sql("fact_movilidad", engine, schema=schema, if_exists="append", index=False)
+    dim_tiempo.to_sql("dim_tiempo", engine, schema=schema, if_exists="append", index=False)
+    dim_geografia.to_sql("dim_geografia", engine, schema=schema, if_exists="append", index=False)
+    dim_universidad.to_sql("dim_universidad", engine, schema=schema, if_exists="append", index=False)
+    dim_tipo_movilidad.to_sql("dim_tipo_movilidad", engine, schema=schema, if_exists="append", index=False)
+    fact_movilidad.to_sql("fact_movilidad", engine, schema=schema, if_exists="append", index=False)
     kpis_db.to_sql("kpis_movilidad", engine, schema=schema, if_exists="append", index=False)
 
     return {
